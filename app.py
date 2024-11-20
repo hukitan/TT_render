@@ -1,5 +1,6 @@
 import pandas as pd
 import scipy.stats
+from scipy.stats import rv_discrete
 import streamlit as st
 import time
 
@@ -10,23 +11,31 @@ if 'experiment_no' not in st.session_state:
 if 'df_experiment_results' not in st.session_state:
     st.session_state['df_experiment_results'] = pd.DataFrame(columns=['no', 'iteraciones', 'media'])
 
-st.header('Lanzar una moneda')
+st.header('Lanzar un dado')
+st.write("omaiga. Sí pudimos")
 
 chart = st.line_chart([0.5])
 
-def toss_coin(n):
+def roll_dice(n):
+    # Valores y probabilidades de un dado justo
+    valores = [1, 2, 3, 4, 5, 6]
+    probabilidades = [1/6] * 6
 
-    trial_outcomes = scipy.stats.bernoulli.rvs(p=0.5, size=n)
+    # Crear la distribución discreta para el dado
+    dado = rv_discrete(name='dado', values=(valores, probabilidades))
+
+    # Generar los resultados de los lanzamientos
+    trial_outcomes = dado.rvs(size=n)
 
     mean = None
     outcome_no = 0
-    outcome_1_count = 0
+    total_sum = 0
 
     for r in trial_outcomes:
-        outcome_no +=1
-        if r == 1:
-            outcome_1_count += 1
-        mean = outcome_1_count / outcome_no
+        outcome_no += 1
+        total_sum += r
+        mean = total_sum / outcome_no
+        # Aquí asumimos que chart es un objeto de visualización para graficar resultados
         chart.add_rows([mean])
         time.sleep(0.05)
 
@@ -38,7 +47,7 @@ start_button = st.button('Ejecutar')
 if start_button:
     st.write(f'Experimento con {number_of_trials} intentos en curso.')
     st.session_state['experiment_no'] += 1
-    mean = toss_coin(number_of_trials)
+    mean = roll_dice(number_of_trials)
     st.session_state['df_experiment_results'] = pd.concat([
         st.session_state['df_experiment_results'],
         pd.DataFrame(data=[[st.session_state['experiment_no'],
