@@ -12,7 +12,9 @@ if 'df_experiment_results' not in st.session_state:
     st.session_state['df_experiment_results'] = pd.DataFrame(columns=['no', 'iteraciones', 'media'])
 
 st.header('Lanzar un dado')
+st.write("Se lanza un dado y se grafican los resulatados por cada set de tiradas. Se almanecan los sets independientes en una tabla")
 st.write("omaiga. Sí pudimos")
+
 
 chart = st.line_chart([0.5])
 
