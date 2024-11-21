@@ -2,7 +2,7 @@
 
 - Este repositorio esta enfocado en desarrollar e implementar en [Render](https://render.com/) el proyecto 7.
 - La URL de donde esta alojado el Deploy es [tt-render.onrender.com](https://tt-render.onrender.com/)
-- Las dependencias estan especificados en requierements.txt
+- Las dependencias estan especificados en [requierements.txt](/requirements.txt)
   - El proyecto esta construido en [Streamlit](https://streamlit.io/)
   - Las graficas estan generadas con [Plotty](https://plotly.com/)
   - El analisis y manipulacion de datos es con la libreria [Pandas](https://pandas.pydata.org/)
@@ -11,7 +11,7 @@
 - La estructura es la siguiente
 
 ```bash
-tree
+$tree
 
 ├── README.md
 ├── app.py
