@@ -9,7 +9,8 @@ if 'experiment_no' not in st.session_state:
     st.session_state['experiment_no'] = 0
 
 if 'df_experiment_results' not in st.session_state:
-    st.session_state['df_experiment_results'] = pd.DataFrame(columns=['no', 'iteraciones', 'media'])
+    st.session_state['df_experiment_results'] = pd.DataFrame(
+        columns=['no', 'iteraciones', 'media'])
 
 st.header('Lanzar un dado')
 st.write("Se lanza un dado y se grafican los resulatados por cada set de tiradas. Se almanecan los sets independientes en una tabla")
@@ -17,6 +18,7 @@ st.write("omaiga. Sí pudimos")
 
 
 chart = st.line_chart([0.5])
+
 
 def roll_dice(n):
     # Valores y probabilidades de un dado justo
@@ -43,6 +45,7 @@ def roll_dice(n):
 
     return mean
 
+
 number_of_trials = st.slider('¿Número de intentos?', 1, 1000, 50)
 start_button = st.button('Ejecutar')
 
@@ -55,9 +58,10 @@ if start_button:
         pd.DataFrame(data=[[st.session_state['experiment_no'],
                             number_of_trials,
                             mean]],
-                    columns=['no', 'iteraciones', 'media'])
-        ],
+                     columns=['no', 'iteraciones', 'media'])
+    ],
         axis=0)
-    st.session_state['df_experiment_results'] = st.session_state['df_experiment_results'].reset_index(drop=True)
+    st.session_state['df_experiment_results'] = st.session_state['df_experiment_results'].reset_index(
+        drop=True)
 
 st.write(st.session_state['df_experiment_results'])
