@@ -19,8 +19,8 @@ $tree
 ├── requirements.txt
 └── notebooks
     └── EDA.ipynb
-    └── Data
-        └── file.csv
+└── Data
+    ── afluenciastc_desglosado_10_2024.csv
 └── .streamlit
     └── config.toml
 ```
