@@ -1,67 +1,20 @@
-import pandas as pd
-import scipy.stats
-from scipy.stats import rv_discrete
+#preambulo importamos paquetes a usar
 import streamlit as st
-import time
+import pandas as pd
+import plotly.express as px
+import lib 
 
-# estas son variables de estado que se conservan cuando Streamlin vuelve a ejecutar este script
-if 'experiment_no' not in st.session_state:
-    st.session_state['experiment_no'] = 0
-
-if 'df_experiment_results' not in st.session_state:
-    st.session_state['df_experiment_results'] = pd.DataFrame(
-        columns=['no', 'iteraciones', 'media'])
-
-st.header('Lanzar un dado')
-st.write("Se lanza un dado y se grafican los resulatados por cada set de tiradas. Se almanecan los sets independientes en una tabla")
-st.write("omaiga. Sí pudimos")
-
-
-chart = st.line_chart([0.5])
+#Preambulo de datos
+aflue = pd.read_csv("Data/afluenciastc_desglosado_10_2024.csv")
+aflue["fecha"] = pd.to_datetime(aflue["fecha"])
+aflue["n_mes"] = aflue["fecha"].dt.month
+aflue["linea"] = aflue["linea"].apply(lib.fix_linea)
+aflue["mes"] = aflue["n_mes"].apply(lib.fill_mes)
+# Se generan codigos de color para poder usar los colores oficiales por linea del metro
+colores = {"Linea 1": "#F04E98", "Linea 2": "#005EB8", "Linea 3": "#AF9800", "Linea 4": "#6BBBAE", "Linea 5": "#FFD100", "Linea 6": "#DA291C",
+           "Linea 7": "#E87722", "Linea 8": "#009A44", "Linea 9": "#512F2E", "Linea A": "#981D97", "Linea B": "#B1B3B3", "Linea 12": "#B0A32A"}
 
 
-def roll_dice(n):
-    # Valores y probabilidades de un dado justo
-    valores = [1, 2, 3, 4, 5, 6]
-    probabilidades = [1/6] * 6
+st.header("Datos historicos del metro de la CDMX")
+st.write("Se usan los datos oficiales del gobierno de la Ciudad de México")
 
-    # Crear la distribución discreta para el dado
-    dado = rv_discrete(name='dado', values=(valores, probabilidades))
-
-    # Generar los resultados de los lanzamientos
-    trial_outcomes = dado.rvs(size=n)
-
-    mean = None
-    outcome_no = 0
-    total_sum = 0
-
-    for r in trial_outcomes:
-        outcome_no += 1
-        total_sum += r
-        mean = total_sum / outcome_no
-        # Aquí asumimos que chart es un objeto de visualización para graficar resultados
-        chart.add_rows([mean])
-        time.sleep(0.05)
-
-    return mean
-
-
-number_of_trials = st.slider('¿Número de intentos?', 1, 1000, 50)
-start_button = st.button('Ejecutar')
-
-if start_button:
-    st.write(f'Experimento con {number_of_trials} intentos en curso.')
-    st.session_state['experiment_no'] += 1
-    mean = roll_dice(number_of_trials)
-    st.session_state['df_experiment_results'] = pd.concat([
-        st.session_state['df_experiment_results'],
-        pd.DataFrame(data=[[st.session_state['experiment_no'],
-                            number_of_trials,
-                            mean]],
-                     columns=['no', 'iteraciones', 'media'])
-    ],
-        axis=0)
-    st.session_state['df_experiment_results'] = st.session_state['df_experiment_results'].reset_index(
-        drop=True)
-
-st.write(st.session_state['df_experiment_results'])
