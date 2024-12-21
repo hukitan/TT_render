@@ -10,7 +10,13 @@ def wide_space_default():
 wide_space_default()
 
 #Preambulo de datos
-aflue = pd.read_csv("Data/afluenciastc_desglosado_10_2024.csv")
+url1 = "https://datos.cdmx.gob.mx/dataset/f2046fd5-51b5-4876-b008-bd65d95f9a02/resource/cce544e1-dc6b-42b4-bc27-0d8e6eb3ed72/download/afluenciastc_desglosado_10_2024.csv"
+url2 = "https://datos.cdmx.gob.mx/dataset/f2046fd5-51b5-4876-b008-bd65d95f9a02/resource/0e8ffe58-28bb-4dde-afcd-e5f5b4de4ccb/download/afluenciastc_simple_02_2024.csv"
+
+aflue1 = pd.read_csv(url1)
+aflue2 = pd.read_csv(url2)
+
+aflue = pd.concat([aflue1, aflue2])
 aflue["fecha"] = pd.to_datetime(aflue["fecha"])
 aflue["n_mes"] = aflue["fecha"].dt.month
 aflue["linea"] = aflue["linea"].apply(lib.fix_linea)
