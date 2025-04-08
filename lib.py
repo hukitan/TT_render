@@ -1,5 +1,8 @@
 # lib.py
 
+if __name__ == '__main__':
+    print('holi')
+
 # Generamos una funcion para corregir los nombres de las lineas
 def fix_linea(dato):
     """La funcion lee las lineas y corrgie los casos donde hay un acento para unificarlo en modalidad sin acentos"""
